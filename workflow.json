@@ -1,0 +1,1962 @@
+{
+  "name": "Workflow - Aprobación Marketing CM Tuttilandia",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sos el redactor de contenido de Tuttilandia, una marca argentina de valijas, mochilas y accesorios de viaje.\n\nTenés que redactar una pieza de contenido con estos datos:\n- Tipo de pieza: {{ $json.fields.Tipo_Pieza }}\n- Grupo de canal: {{ $json.fields.Grupo_Canal }}\n- Idea semilla: {{ $json.fields.Idea_Semilla }}\n\nAntes de escribir el texto final, consultá la herramienta disponible para traer el tono de voz y las frases prohibidas correspondientes al grupo de canal {{ $json.fields.Grupo_Canal }}. Aplicá ese tono estrictamente y evitá usar cualquiera de las frases prohibidas que encuentres.\n\nDevolvé únicamente el texto final de la pieza, sin explicaciones adicionales.",
+        "options": {
+          "systemMessage": "Sos un asistente de redacción de contenido para redes sociales, email marketing y mensajes de comunidad, especializado en la marca Tuttilandia. Siempre consultás la base de conocimiento de tono de marca antes de escribir."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "5190dc47-e956-4f85-9164-b798bc8470ef",
+      "name": "AI Agent",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        544,
+        208
+      ],
+      "id": "b5d507c2-9672-458d-af8e-a08adc6d3dd8",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "u22W94KfhotNyids",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3pxbzfCJrBgG6D",
+          "mode": "list",
+          "cachedResultName": "Ideas_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tbl3pxbzfCJrBgG6D"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nueva idea cargada').item.json.id }}",
+            "Estado": "Error",
+            "Log_Error": "={{ $json.error }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Idea_Semilla",
+              "displayName": "Idea_Semilla",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_Pieza",
+              "displayName": "Tipo_Pieza",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Story",
+                  "value": "Story"
+                },
+                {
+                  "name": "Reel",
+                  "value": "Reel"
+                },
+                {
+                  "name": "Carrusel",
+                  "value": "Carrusel"
+                },
+                {
+                  "name": "Post",
+                  "value": "Post"
+                },
+                {
+                  "name": "Email_Marketing",
+                  "value": "Email_Marketing"
+                },
+                {
+                  "name": "Msj_Comunidad_WhatsApp",
+                  "value": "Msj_Comunidad_WhatsApp"
+                },
+                {
+                  "name": "Msj_Comunidad_IG",
+                  "value": "Msj_Comunidad_IG"
+                },
+                {
+                  "name": "Artículo",
+                  "value": "Artículo"
+                },
+                {
+                  "name": "Infografía",
+                  "value": "Infografía"
+                },
+                {
+                  "name": "Video",
+                  "value": "Video"
+                },
+                {
+                  "name": "Checklist",
+                  "value": "Checklist"
+                },
+                {
+                  "name": "Caso de estudio",
+                  "value": "Caso de estudio"
+                },
+                {
+                  "name": "Plantilla",
+                  "value": "Plantilla"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Grupo_Canal",
+              "displayName": "Grupo_Canal",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha_Cargado",
+              "displayName": "Fecha_Cargado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Generando",
+                  "value": "Generando"
+                },
+                {
+                  "name": "Esperando_Aprobacion",
+                  "value": "Esperando_Aprobacion"
+                },
+                {
+                  "name": "Aprobado",
+                  "value": "Aprobado"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                },
+                {
+                  "name": "En revisión",
+                  "value": "En revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Log_Error",
+              "displayName": "Log_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Piezas_Generadas",
+              "displayName": "Piezas_Generadas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Manual_de_Marca",
+              "displayName": "Manual_de_Marca",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1024,
+        240
+      ],
+      "id": "90533226-3903-4f3e-913c-96b258455345",
+      "name": "Update record5",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "milagrossguazzini@gmail.com",
+        "subject": "⚠️ Error en Workflow generación de contenido — Tuttilandia",
+        "message": "=Falló la generación de contenido para la idea:\n{{ $('Nueva idea cargada').item.json.fields.Idea_Semilla }}\n\nError:{{ $('AI Agent').item.json.error }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        240
+      ],
+      "id": "95777389-de27-47bb-b8e6-7018aafad7be",
+      "name": "Send a message",
+      "webhookId": "3df549be-2d5c-403e-a209-b63af08cbb35",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nv4slud2GxrV95Be",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 1,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "authentication": "airtableOAuth2Api",
+        "baseId": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "id"
+        },
+        "tableId": {
+          "__rl": true,
+          "value": "tbl3pxbzfCJrBgG6D",
+          "mode": "id"
+        },
+        "triggerField": "Fecha_Cargado",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.airtableTrigger",
+      "typeVersion": 1,
+      "position": [
+        32,
+        0
+      ],
+      "id": "d111715f-b0c2-4652-87ac-43c8b7765364",
+      "name": "Nueva idea cargada",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3pxbzfCJrBgG6D",
+          "mode": "list",
+          "cachedResultName": "Ideas_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tbl3pxbzfCJrBgG6D"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Estado": "Generando"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Idea_Semilla",
+              "displayName": "Idea_Semilla",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_Pieza",
+              "displayName": "Tipo_Pieza",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Story",
+                  "value": "Story"
+                },
+                {
+                  "name": "Reel",
+                  "value": "Reel"
+                },
+                {
+                  "name": "Carrusel",
+                  "value": "Carrusel"
+                },
+                {
+                  "name": "Post",
+                  "value": "Post"
+                },
+                {
+                  "name": "Email_Marketing",
+                  "value": "Email_Marketing"
+                },
+                {
+                  "name": "Msj_Comunidad_WhatsApp",
+                  "value": "Msj_Comunidad_WhatsApp"
+                },
+                {
+                  "name": "Msj_Comunidad_IG",
+                  "value": "Msj_Comunidad_IG"
+                },
+                {
+                  "name": "Artículo",
+                  "value": "Artículo"
+                },
+                {
+                  "name": "Infografía",
+                  "value": "Infografía"
+                },
+                {
+                  "name": "Video",
+                  "value": "Video"
+                },
+                {
+                  "name": "Checklist",
+                  "value": "Checklist"
+                },
+                {
+                  "name": "Caso de estudio",
+                  "value": "Caso de estudio"
+                },
+                {
+                  "name": "Plantilla",
+                  "value": "Plantilla"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Grupo_Canal",
+              "displayName": "Grupo_Canal",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha_Cargado",
+              "displayName": "Fecha_Cargado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Generando",
+                  "value": "Generando"
+                },
+                {
+                  "name": "Esperando_Aprobacion",
+                  "value": "Esperando_Aprobacion"
+                },
+                {
+                  "name": "Aprobado",
+                  "value": "Aprobado"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                },
+                {
+                  "name": "En revisión",
+                  "value": "En revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Log_Error",
+              "displayName": "Log_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Piezas_Generadas",
+              "displayName": "Piezas_Generadas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Manual_de_Marca",
+              "displayName": "Manual_de_Marca",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "e07fd0ca-a853-4020-b833-79567cec1138",
+      "name": "Estado actual: Generando",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Busca el tono de voz, frases prohibidas y grupo de canal en la tabla Manual de Marca de Tuttilandia. Usá esta herramienta para saber cómo redactar según el canal (Venta_Difusion, Comunidad o Email) antes de escribir cualquier pieza de contenido.",
+        "authentication": "airtableOAuth2Api",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblrNqJfEvOK1WNgM",
+          "mode": "list",
+          "cachedResultName": "Manual_Marca",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tblrNqJfEvOK1WNgM"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        832,
+        208
+      ],
+      "id": "ed69d6c4-8236-418a-bb7d-eec1d758c61d",
+      "name": "Respuesta basada en Manual de Marca",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDnVI8fbyYJzrvL",
+          "mode": "list",
+          "cachedResultName": "Piezas_Generadas",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tblDnVI8fbyYJzrvL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Aprobado_Humano": false,
+            "Texto_Generado": "={{ $json.output }}",
+            "Modelo_Usado": "gpt-5-mini",
+            "Fecha_Generacion": "={{ $now }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Texto_Generado",
+              "displayName": "Texto_Generado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Modelo_Usado",
+              "displayName": "Modelo_Usado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha_Generacion",
+              "displayName": "Fecha_Generacion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Aprobado_Humano",
+              "displayName": "Aprobado_Humano",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Comentario_Revision",
+              "displayName": "Comentario_Revision",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Idea_Contenido",
+              "displayName": "Idea_Contenido",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        -128
+      ],
+      "id": "35b6fe34-d0cd-4e5b-9220-5bcf1d06561e",
+      "name": "Crea nueva Pieza Generada",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "milagrossguazzini@gmail.com",
+        "subject": "=Revisión de contenido:  {{ $('Nueva idea cargada').item.json.fields.Tipo_Pieza }}",
+        "message": "=Se generó una nueva pieza de contenido lista para tu revisión.\n\nIdea semilla: {{ $('Nueva idea cargada').item.json.fields.Idea_Semilla }}\nTipo de pieza: {{ $('Nueva idea cargada').item.json.fields.Tipo_Pieza }}\n\nTexto generado:\n{{ $('AI Agent').item.json.output }}\n\nRevisalo y aprobá o rechazá desde los botones de abajo. Si rechazás, podés dejar un comentario para ajustar el próximo intento.\n\nSistema de Planificación de Contenido — Tuttilandia",
+        "responseType": "customForm",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Aprobar contenido",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "SI"
+                  },
+                  {
+                    "option": "NO"
+                  }
+                ]
+              },
+              "limitSelection": "exact"
+            },
+            {
+              "fieldLabel": "Comentario"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1376,
+        -128
+      ],
+      "id": "20bdf3e1-176a-419c-b455-aa10291e3089",
+      "name": "Pide aprobación por mail a directivo",
+      "webhookId": "94ed6b46-7f49-48f0-a360-f64a93abf6cc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nv4slud2GxrV95Be",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f652e34e-aadb-4559-9f41-cb1b957f8418",
+              "leftValue": "={{ $json.data['Aprobar contenido'][0] }}",
+              "rightValue": "SI",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1536,
+        -128
+      ],
+      "id": "f9602161-f425-4b03-ae9c-cc85b0522949",
+      "name": "Aprobado?"
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3pxbzfCJrBgG6D",
+          "mode": "list",
+          "cachedResultName": "Ideas_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tbl3pxbzfCJrBgG6D"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nueva idea cargada').item.json.id }}",
+            "Estado": "Aprobado"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Idea_Semilla",
+              "displayName": "Idea_Semilla",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_Pieza",
+              "displayName": "Tipo_Pieza",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Story",
+                  "value": "Story"
+                },
+                {
+                  "name": "Reel",
+                  "value": "Reel"
+                },
+                {
+                  "name": "Carrusel",
+                  "value": "Carrusel"
+                },
+                {
+                  "name": "Post",
+                  "value": "Post"
+                },
+                {
+                  "name": "Email_Marketing",
+                  "value": "Email_Marketing"
+                },
+                {
+                  "name": "Msj_Comunidad_WhatsApp",
+                  "value": "Msj_Comunidad_WhatsApp"
+                },
+                {
+                  "name": "Msj_Comunidad_IG",
+                  "value": "Msj_Comunidad_IG"
+                },
+                {
+                  "name": "Artículo",
+                  "value": "Artículo"
+                },
+                {
+                  "name": "Infografía",
+                  "value": "Infografía"
+                },
+                {
+                  "name": "Video",
+                  "value": "Video"
+                },
+                {
+                  "name": "Checklist",
+                  "value": "Checklist"
+                },
+                {
+                  "name": "Caso de estudio",
+                  "value": "Caso de estudio"
+                },
+                {
+                  "name": "Plantilla",
+                  "value": "Plantilla"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Grupo_Canal",
+              "displayName": "Grupo_Canal",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha_Cargado",
+              "displayName": "Fecha_Cargado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Generando",
+                  "value": "Generando"
+                },
+                {
+                  "name": "Esperando_Aprobacion",
+                  "value": "Esperando_Aprobacion"
+                },
+                {
+                  "name": "Aprobado",
+                  "value": "Aprobado"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                },
+                {
+                  "name": "En revisión",
+                  "value": "En revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Log_Error",
+              "displayName": "Log_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Piezas_Generadas",
+              "displayName": "Piezas_Generadas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Manual_de_Marca",
+              "displayName": "Manual_de_Marca",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "updateAllMatches": false
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        -224
+      ],
+      "id": "71a591b8-f3b2-43eb-8fe7-d13707fe3ad1",
+      "name": "Aprobado en planilla contenido",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDnVI8fbyYJzrvL",
+          "mode": "list",
+          "cachedResultName": "Piezas_Generadas",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tblDnVI8fbyYJzrvL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Aprobado_Humano": true,
+            "id": "={{ $('Crea nueva Pieza Generada').item.json.id }}",
+            "Comentario_Revision": "={{ $('Aprobado?').item.json.data.Comentario }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Texto_Generado",
+              "displayName": "Texto_Generado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Modelo_Usado",
+              "displayName": "Modelo_Usado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha_Generacion",
+              "displayName": "Fecha_Generacion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Aprobado_Humano",
+              "displayName": "Aprobado_Humano",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Comentario_Revision",
+              "displayName": "Comentario_Revision",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Idea_Contenido",
+              "displayName": "Idea_Contenido",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        2000,
+        -224
+      ],
+      "id": "e911a3f1-2fcd-41f4-8b7d-46289ba9e0ce",
+      "name": "Aprobado en PIEZA GENERADA",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3pxbzfCJrBgG6D",
+          "mode": "list",
+          "cachedResultName": "Ideas_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tbl3pxbzfCJrBgG6D"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nueva idea cargada').item.json.id }}",
+            "Estado": "Rechazado"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Idea_Semilla",
+              "displayName": "Idea_Semilla",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_Pieza",
+              "displayName": "Tipo_Pieza",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Story",
+                  "value": "Story"
+                },
+                {
+                  "name": "Reel",
+                  "value": "Reel"
+                },
+                {
+                  "name": "Carrusel",
+                  "value": "Carrusel"
+                },
+                {
+                  "name": "Post",
+                  "value": "Post"
+                },
+                {
+                  "name": "Email_Marketing",
+                  "value": "Email_Marketing"
+                },
+                {
+                  "name": "Msj_Comunidad_WhatsApp",
+                  "value": "Msj_Comunidad_WhatsApp"
+                },
+                {
+                  "name": "Msj_Comunidad_IG",
+                  "value": "Msj_Comunidad_IG"
+                },
+                {
+                  "name": "Artículo",
+                  "value": "Artículo"
+                },
+                {
+                  "name": "Infografía",
+                  "value": "Infografía"
+                },
+                {
+                  "name": "Video",
+                  "value": "Video"
+                },
+                {
+                  "name": "Checklist",
+                  "value": "Checklist"
+                },
+                {
+                  "name": "Caso de estudio",
+                  "value": "Caso de estudio"
+                },
+                {
+                  "name": "Plantilla",
+                  "value": "Plantilla"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Grupo_Canal",
+              "displayName": "Grupo_Canal",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha_Cargado",
+              "displayName": "Fecha_Cargado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Generando",
+                  "value": "Generando"
+                },
+                {
+                  "name": "Esperando_Aprobacion",
+                  "value": "Esperando_Aprobacion"
+                },
+                {
+                  "name": "Aprobado",
+                  "value": "Aprobado"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                },
+                {
+                  "name": "En revisión",
+                  "value": "En revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Log_Error",
+              "displayName": "Log_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Piezas_Generadas",
+              "displayName": "Piezas_Generadas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Manual_de_Marca",
+              "displayName": "Manual_de_Marca",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1792,
+        -16
+      ],
+      "id": "52e12d5c-44ed-4ba0-8c6c-8e133680b281",
+      "name": "Rechazado en Planilla Contenido",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblDnVI8fbyYJzrvL",
+          "mode": "list",
+          "cachedResultName": "Piezas_Generadas",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tblDnVI8fbyYJzrvL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Aprobado_Humano": false,
+            "id": "={{ $('Crea nueva Pieza Generada').item.json.id }}",
+            "Comentario_Revision": "={{ $('Pide aprobación por mail a directivo').item.json.data.Comentario }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Texto_Generado",
+              "displayName": "Texto_Generado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Modelo_Usado",
+              "displayName": "Modelo_Usado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Fecha_Generacion",
+              "displayName": "Fecha_Generacion",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Aprobado_Humano",
+              "displayName": "Aprobado_Humano",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Comentario_Revision",
+              "displayName": "Comentario_Revision",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Idea_Contenido",
+              "displayName": "Idea_Contenido",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        2016,
+        -16
+      ],
+      "id": "2d2aa9a2-7dc8-47ef-b07b-f1cbb1c0854e",
+      "name": "Rechazado en PIEZA GENERADA",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "airtableOAuth2Api",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appwxrgbIQzjBkYB0",
+          "mode": "list",
+          "cachedResultName": "Tuttilandia_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl3pxbzfCJrBgG6D",
+          "mode": "list",
+          "cachedResultName": "Ideas_Contenido",
+          "cachedResultUrl": "https://airtable.com/appwxrgbIQzjBkYB0/tbl3pxbzfCJrBgG6D"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Nueva idea cargada').item.json.id }}",
+            "Estado": "Esperando_Aprobacion"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Idea_Semilla",
+              "displayName": "Idea_Semilla",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo_Pieza",
+              "displayName": "Tipo_Pieza",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Story",
+                  "value": "Story"
+                },
+                {
+                  "name": "Reel",
+                  "value": "Reel"
+                },
+                {
+                  "name": "Carrusel",
+                  "value": "Carrusel"
+                },
+                {
+                  "name": "Post",
+                  "value": "Post"
+                },
+                {
+                  "name": "Email_Marketing",
+                  "value": "Email_Marketing"
+                },
+                {
+                  "name": "Msj_Comunidad_WhatsApp",
+                  "value": "Msj_Comunidad_WhatsApp"
+                },
+                {
+                  "name": "Msj_Comunidad_IG",
+                  "value": "Msj_Comunidad_IG"
+                },
+                {
+                  "name": "Artículo",
+                  "value": "Artículo"
+                },
+                {
+                  "name": "Infografía",
+                  "value": "Infografía"
+                },
+                {
+                  "name": "Video",
+                  "value": "Video"
+                },
+                {
+                  "name": "Checklist",
+                  "value": "Checklist"
+                },
+                {
+                  "name": "Caso de estudio",
+                  "value": "Caso de estudio"
+                },
+                {
+                  "name": "Plantilla",
+                  "value": "Plantilla"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Grupo_Canal",
+              "displayName": "Grupo_Canal",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Fecha_Cargado",
+              "displayName": "Fecha_Cargado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Pendiente",
+                  "value": "Pendiente"
+                },
+                {
+                  "name": "Generando",
+                  "value": "Generando"
+                },
+                {
+                  "name": "Esperando_Aprobacion",
+                  "value": "Esperando_Aprobacion"
+                },
+                {
+                  "name": "Aprobado",
+                  "value": "Aprobado"
+                },
+                {
+                  "name": "Rechazado",
+                  "value": "Rechazado"
+                },
+                {
+                  "name": "Error",
+                  "value": "Error"
+                },
+                {
+                  "name": "En revisión",
+                  "value": "En revisión"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Log_Error",
+              "displayName": "Log_Error",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Piezas_Generadas",
+              "displayName": "Piezas_Generadas",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Manual_de_Marca",
+              "displayName": "Manual_de_Marca",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.2,
+      "position": [
+        1184,
+        -128
+      ],
+      "id": "74f4235f-c66a-459c-99c1-19acfeb1cff7",
+      "name": "Estado actual: Esperando_Aprobación",
+      "credentials": {
+        "airtableOAuth2Api": {
+          "id": "Hq9WmOZbaZVVuBi1",
+          "name": "Airtable account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1286382a-6b98-42d8-8251-9a4fe16d677e",
+              "leftValue": "={{ $json.fields.Estado }}",
+              "rightValue": "Pendiente",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        240,
+        0
+      ],
+      "id": "4f71916c-6a88-4b40-aae6-f85a1beb28ea",
+      "name": "Filtrar solo \"Pendientes\""
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Crea nueva Pieza Generada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update record5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record5": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nueva idea cargada": {
+      "main": [
+        [
+          {
+            "node": "Filtrar solo \"Pendientes\"",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Estado actual: Generando": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respuesta basada en Manual de Marca": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crea nueva Pieza Generada": {
+      "main": [
+        [
+          {
+            "node": "Estado actual: Esperando_Aprobación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pide aprobación por mail a directivo": {
+      "main": [
+        [
+          {
+            "node": "Aprobado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprobado?": {
+      "main": [
+        [
+          {
+            "node": "Aprobado en planilla contenido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rechazado en Planilla Contenido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aprobado en planilla contenido": {
+      "main": [
+        [
+          {
+            "node": "Aprobado en PIEZA GENERADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rechazado en Planilla Contenido": {
+      "main": [
+        [
+          {
+            "node": "Rechazado en PIEZA GENERADA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Estado actual: Esperando_Aprobación": {
+      "main": [
+        [
+          {
+            "node": "Pide aprobación por mail a directivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar solo \"Pendientes\"": {
+      "main": [
+        [
+          {
+            "node": "Estado actual: Generando",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "e9f55cdd-7418-4a17-8aac-6791632205a9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5137734d755f91e87c866ee20fb3ad95cf38d062f49117306574044ce3c32aea"
+  },
+  "nodeGroups": [],
+  "id": "8yO3ChYJr4FsHPOs",
+  "tags": []
+}
