@@ -17,8 +17,7 @@ para publicar.
 - `workflow.json` — blueprint exportado del flujo de n8n
 - `screenshots/` — evidencia de ejecución (canvas de n8n, vistas de Airtable, mails)
     - `ejecución_workflow_sguazzini.mp4` — video de la ejecución completa del flujo
-- Link al dashboard público (Airtable Shared View) y a la base en modo lectura: 
-  incluidos en el PDF
+- Link a la base en modo lectura: https://airtable.com/appwxrgbIQzjBkYB0/shrG92S7wC7pbTeWV 
 
 ## Caso de uso real
 Aplicado al negocio real de Tuttilandia (marroquinería, Santa Fe, Argentina) — 
